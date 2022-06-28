@@ -4,9 +4,53 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vanleejs</title>
+    <title>前端说</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #app {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      main {
+        flex: 1;
+      }
+      footer {
+        height: 60px;
+        background-color: #ececec;
+        display: flex;
+      }
+      footer a {
+        color: coral;
+      }
+      .center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
   </head>
   <body>
-    <p>欢迎来到vleejs.com</p>
+    <div id="app">
+      <header></header>
+      <main class="center">
+        <p>欢迎来到vanleejs~~~</p>
+        <p>网站正在积极重写中</p>
+      </main>
+      <footer class="center">
+        <a
+          title="京ICP备2021023212号"
+          href="https://beian.miit.gov.cn/#/Integrated/recordQuery"
+          target="_blank"
+        >
+          京ICP备2021023212号-1
+        </a>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;by vanlee</span>
+      </footer>
+    </div>
   </body>
 </html>
