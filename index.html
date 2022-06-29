@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>前端说</title>
+    <title>洋小洋同学</title>
 
     <style>
       * {
@@ -15,6 +15,16 @@
         display: flex;
         flex-direction: column;
         height: 100vh;
+        overflow-x: hidden;
+      }
+      header {
+        height: 80px;
+        background-color: #f5f7fa;
+        display: flex;
+        align-items: center;
+      }
+      .steps {
+        width: 100%;
       }
       main {
         flex: 1;
@@ -32,13 +42,107 @@
         align-items: center;
         justify-content: center;
       }
+      .progress-x {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        margin-left: 13%;
+      }
+
+      .progress-x > section.steps-section {
+        display: flex;
+        align-items: center;
+        flex: 25%;
+      }
+      .progress-x .steps-line {
+        text-align: center;
+        width: calc(100% - 10px);
+        height: 1px;
+        border: 1px solid #ddd;
+        background: #ccc;
+      }
+
+      .progress-x > section > span.steps-number {
+        width: 8px;
+        height: 8px;
+        text-align: center;
+        border-radius: 50%;
+        border: 1px solid #ddd;
+        color: #ccc;
+        background: #fff;
+      }
+
+      .progress-x > section.current-n > span.steps-number {
+        width: 13px;
+        height: 13px;
+        border: 1px solid #178cff;
+        color: #fff;
+        background: #178cff;
+      }
+
+      .step {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        text-align: center;
+      }
+      .step > span.current-n {
+        font-size: 16px;
+      }
+      .steps-title {
+        margin-top: 5px;
+        flex: 25%;
+        font-size: 14px;
+      }
     </style>
   </head>
   <body>
-    <div id="app">
-      <header></header>
+    <section id="app">
+      <header>
+        <section class="steps">
+          <section class="progress-x">
+            <section class="steps-section">
+              <span class="steps-number number1"></span>
+              <span class="steps-line"></span>
+            </section>
+
+            <section class="steps-section current-n">
+              <span class="steps-number number2"></span>
+              <span class="steps-line"></span>
+            </section>
+
+            <section class="steps-section">
+              <span class="steps-number number3"></span>
+              <span class="steps-line"></span>
+            </section>
+
+            <section class="steps-section">
+              <span class="steps-number number4"></span>
+            </section>
+          </section>
+          <section class="step">
+            <span class="steps-title">加薪</span>
+            <span class="steps-title current-n">宜居</span>
+            <span class="steps-title">定居</span>
+            <span class="steps-title">todo</span>
+          </section>
+        </section>
+        <!-- <ul>
+          <li>规划</li>
+        </ul> -->
+      </header>
+      <section class="city-nav">
+        <section class="city-nav-tab">
+          <button>按照城市</button>
+          <button>按照维度</button>
+        </section>
+        <div class="city-nav-rank">
+          <a href="">长沙</a>
+          <a href="">武汉</a>
+        </div>
+      </section>
       <main class="center">
-        <p>欢迎来到vanleejs~~~</p>
+        <p>欢迎走进小洋同学~~~</p>
         <p>网站正在积极重写中</p>
       </main>
       <footer class="center">
@@ -49,8 +153,16 @@
         >
           京ICP备2021023212号-1
         </a>
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;by vanlee</span>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&copy; vanlee</span>
+        <span class="now"></span>
       </footer>
-    </div>
+    </section>
+    <script type="module">
+      import { ymdhms } from './src/utils.js'
+
+      const nowDom = document.querySelector('.now')
+      const now = ymdhms()
+      nowDom.innerHTML = now
+    </script>
   </body>
 </html>
