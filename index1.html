@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vanlee</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <button class="cos-btn">COS</button>
+      <input id="file-selector" class="ipt" type="file" accept="video/mp4" />
+    </section>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/cos-js-sdk-v5/dist/cos-js-sdk-v5.min.js"></script>
+    <script type="module">
+      // 常量
+      import { bucket, region, reqUrl } from './constant.js'
+      // 常用方法
+      import { getDOM } from './utils.js'
+      // doms
+      const iptDom = getDOM('file-selector')
+      // dom event
+
+      iptDom.addEventListener('change', (e) => {
+        const file0 = iptDom.files[0]
+        // lastModified: 1656659041089
+        // lastModifiedDate: Fri Jul 01 2022 15:04:01 GMT+0800 (中国标准时间) {}
+        // name: "test1.mp4"
+        // size: 1706660
+        // type: "video/mp4"
+        // webkitRelativePath: ""
+        console.log('input 选择 发生变化 文件是', file0)
+
+        uploadObject(file0)
+      })
+
+      // 桶名称
+
+      // 上传到腾讯cos
+      function uploadObject(file) {
+        const type = file.type.substring(0, 5)
+        const fileName = file.name || ''
+        const originFileName = fileName
+          .split('.')
+          .slice(0, fileName.split('.').length - 1)
+          .join('')
+        const uploadFileName =
+          new Date().getTime() +
+          '.' +
+          fileName.split('')[fileName.split('').length - 1]
+        console.log('文件类型', type)
+        console.log('文件名称', fileName)
+        console.log('文件原始名称', originFileName)
+
+        // cos 操作
+
+        fetch(reqUrl)
+          .then((response) => response.json())
+          .then((data) => {
+            console.log('临时', data)
+
+            const { expiredTime, startTime, credentials } = data
+
+            const { sessionToken, tmpSecretId, tmpSecretKey } = credentials
+
+            const options = {
+              Bucket: bucket,
+              Region: region,
+            }
+            const cos = new COS({
+              getAuthorization(options, callback) {
+                callback({
+                  TmpSecretId: tmpSecretId,
+                  TmpSecretKey: tmpSecretKey,
+                  SecurityToken: sessionToken,
+                  // 建议返回服务器时间作为签名的开始时间，避免用户浏览器本地时间偏差过大导致签名错误
+                  StartTime: startTime, // 时间戳，单位秒，如：1580000000
+                  ExpiredTime: expiredTime, // 时间戳，单位秒，如：1580000000
+                })
+              },
+            })
+
+            cos.putObject(
+              {
+                Bucket: bucket,
+                Region: region,
+                Key: 'test-key',
+                StorageClass: 'STANDARD',
+                Body: file,
+                onHashProgress: (progressData) => {
+                  console.log('校验中', JSON.stringify(progressData))
+                },
+                onProgress: (progressData) => {
+                  const percent = parseInt(progressData.percent * 10000) / 100
+                  const speed =
+                    parseInt((progressData.speed / 1024 / 1024) * 100) / 100
+                  console.log(
+                    '进度：' + percent + '%; 速度：' + speed + 'Mb/s;'
+                  )
+                },
+              },
+              (err, data) => {
+                if (err) {
+                  console.log('文件上传 失败', err)
+                } else {
+                  console.log('文件上传 成功', data)
+                }
+              }
+            )
+          })
+      }
+    </script>
+  </body>
+</html>
